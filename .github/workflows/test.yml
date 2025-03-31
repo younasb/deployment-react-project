@@ -11,8 +11,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container:
-      image: node:20
     steps:
       - name: Checkout code
         uses: actions/checkout@v4 # Updated to v4
@@ -20,16 +18,13 @@ jobs:
           # Required for SonarCloud analysis of PRs
           # Fetches Git history needed to identify changed files
           fetch-depth: 0
-
-      # Add caching for npm dependencies
-      - name: Cache node modules
-        uses: actions/cache@v4
+      - name: setup nodeJs
+      #setup nodeJs
+        uses: actions/setup-node@v4
         with:
-          path: ~/.npm # Cache the npm cache directory
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
+            node-version: '20'
+            cash: 'npm'
+            
       - name: Install dependencies
         run: npm ci
 
@@ -44,8 +39,3 @@ jobs:
         env:
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed for PR decoration
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # Optional: Add with args if needed for specific SonarCloud project config
-        # with:
-        #   args: >
-        #     -Dsonar.organization=your-org-key
-        #     -Dsonar.projectKey=your-project-key
