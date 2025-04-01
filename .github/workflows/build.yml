@@ -51,7 +51,7 @@ jobs:
          python-version: '3.9'
       
       - name: install the gcloud cli
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v2
       
       - name: 'use gcloud sdk'
         run: 'gcloud info'
