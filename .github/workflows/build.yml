@@ -53,10 +53,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:  
-         python-version: '3.9'
       
       - name: install the gcloud cli
         uses: google-github-actions/setup-gcloud@v2
@@ -107,9 +103,10 @@ jobs:
           echo "c: ${TAG_NAME}"
 
       - name: LOG docker tag 2
-        run: |
-          'echo "Generated tags 2 are: ${{ steps.define_tag.outputs.tag_value }}"'
-          'echo "Generated tags 2 ENV: ${{ env.TAG_NAME }}"'
+        run: 'echo "Generated tags 2 are: ${{ steps.define_tag.outputs.tag_value }}"'
+      - name: LOG docker tag ENV 2
+        run: 'echo "Generated tags 2 ENV: ${{ env.TAG_NAME }}"'
+        
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
