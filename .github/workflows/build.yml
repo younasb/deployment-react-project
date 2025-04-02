@@ -94,6 +94,7 @@ jobs:
       - name: define tag v2
         id: define-tag
         run: |
+          TAG_NAME="SS"
           if [ ${{ github.event_name }} == 'pull_request' ] ; then
             HEAD_SHA=${{ github.event.pull_request.head.sha }}
             echo "TAG_NAME=PR-${{ github.event.pull_request.number }}-$(date +%Y%m%d%H%M)-${HEAD_SHA:0:8}" >> $GITHUB_ENV
@@ -106,7 +107,9 @@ jobs:
           echo "c: ${TAG_NAME}"
 
       - name: LOG docker tag 2
-        run: 'echo "Generated tags 2 are: ${TAG_NAME}"'
+        run: |
+          'echo "Generated tags 2 are: ${TAG_NAME}"'
+          'echo "Generated tags 2 ENV: ${{ env.TAG_NAME }}"'
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
