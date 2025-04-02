@@ -82,10 +82,27 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/dep-react
+          tags: |
+            # Tag with the Git branch name (e.g., 'main')
+            type=ref,event=branch
+            # Tag with the full Git commit SHA (e.g., 'sha256:...')
+            type=sha,format=long
           
       - name: LOG docker metadata
         run: 'echo "Generated tags are: ${{ steps.meta.outputs.tags }}"'
-        
+      
+      - name: define tag v2
+        id: define-tag
+        run: |
+          if [ ${{ github.event_name }} == 'pull_request' ] ; then
+            HEAD_SHA=${{ github.event.pull_request.head.sha }}
+            echo "TAG_NAME=PR-${{ github.event.pull_request.number }}-$(date +%Y%m%d%H%M)-${HEAD_SHA:0:8}" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed -e 's/[\/_ @]/-/g')-$(date +%Y%m%d%H%M)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          fi
+
+      - name: LOG docker tag 2
+        run: 'echo "Generated tags 2 are: ${TAG_NAME}"'
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
