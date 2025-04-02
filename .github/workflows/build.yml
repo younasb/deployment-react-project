@@ -101,9 +101,9 @@ jobs:
             echo "TAG_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed -e 's/[\/_ @]/-/g')-$(date +%Y%m%d%H%M)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
           fi
           # --- Changed to use GITHUB_OUTPUT ---
-          echo "tag_value=${TAG_VALUE}" >> $GITHUB_OUTPUT
+          echo "tag_value=${TAG_NAME}" >> $GITHUB_OUTPUT
           # Optional: Still echo for logging if you want
-          echo "Calculated tag: ${TAG_VALUE}"
+          echo "c: ${TAG_NAME}"
 
       - name: LOG docker tag 2
         run: 'echo "Generated tags 2 are: ${TAG_NAME}"'
