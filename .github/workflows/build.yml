@@ -12,7 +12,6 @@ env:
   GAR_LOCATION: us-central1
   SERVICE: YOUR_SERVICE_NAME
   REPOSITORY: deployment-react
-  REGION: YOUR_SERVICE_REGION # TODO: update Cloud Run service region
 
 jobs:
   build:
@@ -83,7 +82,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/dep-react
-      
+          
+      - name: LOG docker metadata
+        run: 'echo "Generated tags are: ${{ steps.meta.outputs.tags }}"'
+        
       # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
