@@ -108,7 +108,7 @@ jobs:
 
       - name: LOG docker tag 2
         run: |
-          'echo "Generated tags 2 are: ${TAG_NAME}"'
+          'echo "Generated tags 2 are: ${{ steps.define_tag.outputs.tag_value }}"'
           'echo "Generated tags 2 ENV: ${{ env.TAG_NAME }}"'
       # Build and push Docker image
       - name: Build and push Docker image
