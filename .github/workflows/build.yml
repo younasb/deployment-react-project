@@ -122,7 +122,6 @@ jobs:
       - name: Substitute Image Tag in Deployment Manifest
         run: |
           echo "Substituting image tag with: ${{ env.TAG_NAME }}"
-          # Use sed to replace the placeholder tag in the deployment file
           # Note the use of a different delimiter (#) for sed in case tags contain slashes
           sed -i "s#image: us-central1-docker.pkg.dev/.*/dep-react:placeholder-tag#image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/dep-react:${{ env.TAG_NAME }}#" devops/k8s/deployment.yaml
           echo "--- Patched deployment.yaml ---"
@@ -136,6 +135,3 @@ jobs:
           # Optional: Wait for deployment rollout to complete
           # echo "Waiting for deployment rollout..."
           # kubectl rollout status deployment/static-react-app-deployment --timeout=5m
-    
-
-        
