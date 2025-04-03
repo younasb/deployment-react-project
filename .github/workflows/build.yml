@@ -13,6 +13,10 @@ env:
   SERVICE: YOUR_SERVICE_NAME
   REPOSITORY: deployment-react
 
+  # --- Add GKE Cluster Info ---
+  GKE_CLUSTER:  my-first-cluster-1
+  GKE_LOCATION: us-central1-c
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -107,8 +111,31 @@ jobs:
           cache-from: type=gha # Enable GitHub Actions cache for Docker layers
           cache-to: type=gha,mode=max
       
-
-          
+      #K8S 
+      - name: Get GKE Credentials
+        id: get-credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_LOCATION }}
+      
+      - name: Substitute Image Tag in Deployment Manifest
+        run: |
+          echo "Substituting image tag with: ${{ env.TAG_NAME }}"
+          # Use sed to replace the placeholder tag in the deployment file
+          # Note the use of a different delimiter (#) for sed in case tags contain slashes
+          sed -i "s#image: us-central1-docker.pkg.dev/.*/dep-react:placeholder-tag#image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/dep-react:${{ env.TAG_NAME }}#" devops/k8s/deployment.yaml
+          echo "--- Patched deployment.yaml ---"
+          cat devops/k8s/deployment.yaml # Print the patched file for verification
+          echo "--- End Patched deployment.yaml ---"
+      
+      - name: Deploy to GKE
+        run: |
+          echo "Applying Kubernetes manifests..."
+          kubectl apply -f devops/k8s/
+          # Optional: Wait for deployment rollout to complete
+          # echo "Waiting for deployment rollout..."
+          # kubectl rollout status deployment/static-react-app-deployment --timeout=5m
     
 
         
