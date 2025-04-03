@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # Name your service (e.g., 'static-react-app-service')
+  name: static-react-app-service
+spec:
+  selector:
+    # Selects the pods managed by the Deployment based on their labels
+    app: static-react-app
+  ports:
+    - protocol: TCP
+      # Port the Service will listen on internally within the cluster
+      port: 80
+      # Port on the pods (containers) to forward traffic to
+      targetPort: 80
+  type: ClusterIP

@@ -23,8 +23,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4 
         with:
-          # Required for SonarCloud analysis of PRs
-          # Fetches Git history needed to identify changed files
           fetch-depth: 0
       - name: setup nodeJs
       #setup nodeJs
@@ -70,9 +68,7 @@ jobs:
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
-      # Extract metadata (tags, labels) for Docker
-      # This will generate tags like the commit SHA, 'latest' etc.
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -83,14 +79,11 @@ jobs:
             type=ref,event=branch
             # Tag with the full Git commit SHA (e.g., 'sha256:...')
             type=sha,format=long
-          
-      - name: LOG docker metadata
-        run: 'echo "Generated tags are: ${{ steps.meta.outputs.tags }}"'
-      
+        
       - name: define tag v2
         id: define-tag
         run: |
-          TAG_NAME="SS"
+          TAG_NAME=""
           if [ ${{ github.event_name }} == 'pull_request' ] ; then
             HEAD_SHA=${{ github.event.pull_request.head.sha }}
             echo "TAG_NAME=PR-${{ github.event.pull_request.number }}-$(date +%Y%m%d%H%M)-${HEAD_SHA:0:8}" >> $GITHUB_ENV

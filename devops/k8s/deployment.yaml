@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-react-app-deployment
+  labels:
+    app: static-react-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # Must match the labels defined in the pod template below
+      app: static-react-app
+  template:
+    metadata:
+      labels:
+        # Labels applied to each pod created by this deployment
+        app: static-react-app
+    spec:
+      containers:
+        # Define the container to run
+      - name: nginx-static-server # Container name
+        # --- IMPORTANT: Use the image path from Artifact Registry ---
+        image: us-central1-docker.pkg.dev/winged-acolyte-453510-q9/deployment-react/dep-react:placeholder-tag
+        ports:
+          # The port Nginx listens on inside the container (from your Dockerfile)
+        - containerPort: 80

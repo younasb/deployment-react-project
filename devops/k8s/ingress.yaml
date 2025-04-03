@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # Name your ingress (e.g., 'static-react-app-ingress')
+  name: static-react-app-ingress
+  annotations:
+    # --- OPTIONAL BUT RECOMMENDED ---
+    # Use Google-managed SSL certificates (requires a verified domain later)
+    # kubernetes.io/ingress.class: "gce" # Often default on GKE
+    # networking.gke.io/managed-certificates: "react-app-certificate" # Name of ManagedCertificate resource (create separately)
+    # Use HTTP->HTTPS redirect
+    # kubernetes.io/ingress.allow-http: "false"
+spec:
+  # --- OPTIONAL: Define TLS certificate ---
+  # tls:
+  # - secretName: react-app-tls-secret # If using your own certs via secrets
+  #   hosts:
+  #     - your-domain.com
+  rules:
+  - http:
+      paths:
+      - path: /* # Send all traffic
+        pathType: ImplementationSpecific # Or Prefix
+        backend:
+          service:
+            # Must match the name of your Service resource
+            name: static-react-app-service
+            port:
+              # Must match the 'port' defined in your Service resource
+              number: 80
+  # --- OPTIONAL BUT RECOMMENDED for Google Managed Certs ---
+  # defaultBackend:
+  #   service:
+  #     name: static-react-app-service
+  #     port:
+  #       number: 80
