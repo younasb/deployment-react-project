@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: react-app-certificate
+spec:
+  domains:
+    - devops-noob.eu

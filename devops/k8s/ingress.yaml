@@ -7,7 +7,7 @@ metadata:
     # --- OPTIONAL BUT RECOMMENDED ---
     # Use Google-managed SSL certificates (requires a verified domain later)
     kubernetes.io/ingress.class: "gce" # Often default on GKE
-    networking.gke.io/managed-certificates: "react-app-certificate" # Name of ManagedCertificate resource (create separately)
+    networking.gke.io/managed-certificates: "react-app-certificate"
     # Use HTTP->HTTPS redirect
     kubernetes.io/ingress.allow-http: "false"
 spec:
