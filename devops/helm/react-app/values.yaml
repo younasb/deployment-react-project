@@ -1,0 +1,29 @@
+# Default values for react-app
+replicaCount: 1
+
+image:
+  repository: us-central1-docker.pkg.dev/winged-acolyte-453510-q9/deployment-react/dep-react
+  tag: placeholder-tag
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    kubernetes.io/ingress.allow-http: "true"
+  hosts:
+    - paths:
+        - path: /*
+          pathType: ImplementationSpecific
+          serviceName: react-app
+          servicePort: 80
+
+managedCertificate:
+  enabled: false
+  domains:
+    - devops-noob.eu
