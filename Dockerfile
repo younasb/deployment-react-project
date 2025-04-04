@@ -1,7 +1,5 @@
 # Stage 1: Build the React/Vite application
 FROM node:20-alpine AS builder
-# 'alpine' variants are smaller base images
-# Use 'AS builder' to name this stage
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -30,7 +28,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # (Optional but Recommended for React Router/SPAs) Copy a custom Nginx configuration
 # This ensures that client-side routing works correctly by redirecting all requests
 # to index.html if a specific file/directory isn't found.
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 (the default port Nginx listens on)
 EXPOSE 80
